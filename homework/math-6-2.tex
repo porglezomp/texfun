@@ -1,0 +1,208 @@
+\documentclass{article}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{mathtools}
+\usepackage{enumitem}
+\usepackage{titling}
+\usepackage[margin=1in]{geometry}
+
+\title{Homework 6}
+\author{Caleb Jones}
+\date{October 30}
+\setlength{\droptitle}{-5em}
+
+\renewcommand\vec[1]{\mathbf{#1}}
+\newcommand\norm[1]{\left\lVert#1\right\rVert}
+\newcommand\dsdt{\frac{ds}{dt}}
+\def\R{\mathbb{R}}
+\let\div\relax
+\DeclareMathOperator{\div}{div}
+\DeclareMathOperator{\curl}{curl}
+\let\cross\times%
+\newcommand\diff[2]{\frac{d#1}{d#2}}
+
+\newcommand{\pd}[3][]{
+  \def\tmp{#1}
+  \ifx\tmp\empty%
+  \frac{\partial#2}{\partial#3}
+  \else
+  \frac{\partial^#1 #2}{\partial#3^#1}
+  \fi}
+
+\begin{document}
+\maketitle
+
+% Hi!
+% I decided to set my homework in \LaTeX\@!
+
+\begin{enumerate}[leftmargin=*]
+\item[(1)]
+  Consider $\vec{c}(s)$ such that $\norm{\vec{c}'(s)} = 1$.
+  The \emph{curvature} at a point $\vec{c}(s)$ on this curve is defined by $k = \norm{\vec{c}''(s)}$.
+
+  \begin{enumerate}
+  \item[(a)] The length of $\vec{c}(s)$ from $a$ to $b$ where $a < b$ is
+    \[ \int_a^b \norm{\vec{c}'(s)}\ ds = \int_a^b\ ds = b - a. \]
+    
+  \item[(b)] Let $\vec{c}(s) = (\cos s, \sin s)$.
+    The curvature of $\vec{c}(s)$ is
+    \begin{align*}
+      \vec{c}''(s) & = (-\cos s, -\sin s) \\
+      \implies \norm{\vec{c}''(s)} 
+      & = \sqrt{{\left(-\cos s\right)}^2 + {\left(-\sin s\right)}^2}
+      = 1.
+    \end{align*}
+
+  \item[(c)] Consider a circle $\vec{c}(t)$ with radius $R_0 \ne 1$:
+    \begin{align*}
+      \vec{c}(t) &= \left( R_0 \cos t, y(t) = R_0 \sin t \right),\ 0 \leq t \leq 2\pi. \\
+      \intertext{
+        Finding a parameter $s = s(t)$ such that the speed of $\vec{c}$ is unit with respect to $s$.
+      }
+      \vec{c}'(s) &= \left( -R_0 \dsdt \sin s, R_0 \dsdt \cos(s) \right) \\
+      \norm{\vec{c}'(s)} &= \sqrt{{\left(-R_0 \dsdt \sin s\right)}^2 + {\left(R_0 \dsdt \cos s \right)}^2} \\
+      &= \sqrt{{\left( R_0 \dsdt \right)}^2 \left( \sin^2 s + \cos^2 s\right)} = R_0 \dsdt
+    \end{align*}
+    In order to have $\norm{\vec{c}'(s)} = 1$, $R_0 \dsdt = 1$, so $s = \frac{t}{R_0}$.
+    
+  \item[(d)] Find the curvature of $\vec{c}(t)$ given in part (c).
+    To find the curvature we should consider the unit speed function $\vec{c}(s(t))$.
+    \begin{align*}
+      \vec{c}(t) &= \left(R_0 \cos \frac{t}{R_0}, R_0 \sin \frac{t}{R_0} \right) \\
+      \vec{c}''(t) &= \left(\frac{-1}{R_0} \cos \frac{t}{R_0}, \frac{-1}{R_0} \sin \frac{t}{R_0} \right) \\
+      \norm{\vec{c}''(t)} &= \sqrt{{\left(\frac{-1}{R_0}\right)}^2 \left( \sin^2 t + \cos^2 t \right)} = \frac{1}{R_0}.
+    \end{align*}
+  \end{enumerate}
+
+\item[(2)] If $\vec{F}$ is a vectorfield, a \emph{flow line} for $\vec{F}$ is a curve $\vec{c}(t)$ such that $\vec{c}'(t) = \vec{F}(\vec{c}(t))$.
+  Prove that if $\vec{F} = -\nabla V$, then $V(\vec{c}(t))$ is decreasing in $t$.
+  \begin{align*}
+    \frac{d}{dt}V(\vec{c}(t)) &= \nabla V(\vec{c}(t)) \cdot \vec{c}'(t)
+    = \nabla V(\vec{c}(t)) \cdot \left( -\nabla V(\vec{c}(t)) \right) \\
+    &= -\norm{\nabla V(\vec{c}(t))}^2 \leq 0 \implies \frac{d}{dt}V(\vec{c}(t)) \leq 0
+  \end{align*}
+  so $V(\vec{c}(t))$ is decreasing in t. \qed%
+
+  \pagebreak
+\item[(3)]
+  \begin{enumerate}
+  \item[(a)] Suppose that $f, g, h \colon \R \to \R$ are differentiable. Show that the vectorfield \[ \vec{F}(x, y, z) = (f(x), g(y), h(z)) \] is irrotational.
+    \begin{align*}
+      \curl{\vec{F}} &= \nabla \cross \vec{F} = \begin{vmatrix}
+        \vec{i} & \vec{j} & \vec{k} \\
+        \pd{}{x} & \pd{}{y} & \pd{}{z} \\
+        f & g & h \\
+      \end{vmatrix}
+      = \left(\pd{h}{y} - \pd{g}{z}, \pd{h}{x} - \pd{f}{z}, \pd{g}{x} - \pd{f}{y}\right) \\
+      &= \left(h'(z)\diff{z}{y} - g'(y)\diff{y}{z}, h'(z)\diff{z}{x} - f'(x)\diff{x}{z}, g'(y)\diff{y}{x} - f'(x)\diff{x}{y}\right) \\
+      \intertext{
+        Since $x$, $y$, and $z$ are perpindicular, $\diff{x}{y}$, $\diff{z}{x}$, etc, are all 0, so
+      }
+      &= \left(0, 0, 0\right). \qed
+    \end{align*}
+
+  \item[(b)] Suppose that $f, h, h \colon \R^2 \to \R$ are differentiable. Show that the vectorfield \[ \vec{F}(x, y, z) = (f(y, z), g(x, z), h(x, y)) \] has zero divergence.
+    \begin{align*}
+      \div{\vec{F}} &= \nabla \cdot \vec{F} = \pd{}{x} f(y, z) + \pd{}{y} g(x, z) + \pd{}{z} h(x, y)
+      \intertext{
+        Since $f(y, z)$ is independent of $x$, $g(x, z)$ is independent of $y$, and $h(x, y)$ is independent of $z$,
+      }
+      &= \pd{f}{x} + \pd{g}{y} + \pd{h}{z} = 0 + 0 + 0 = 0. \qed%
+    \end{align*}
+  \end{enumerate}
+
+\item[(4)] A sphere of mass $m$, radius $a$, and uniform density has potential $u$ and gravitational force $\vec{F}$ at a distance $r$ from the center $(0, 0, 0)$, given by
+  \begin{equation*}
+  \begin{aligned}
+    u = \frac{3m}{2a} - \frac{mr^2}{2a^3},\quad & \vec{F} = -\frac{m}{a^3}\vec{r}, & (r \leq a); \\
+    u = \frac{m}{r},\quad & \vec{F} = -\frac{m}{r^3}\vec{r}, & (r > a).
+  \end{aligned}
+  \end{equation*}
+  Where $r = \norm{\vec{r}}$, and $r = (x, y, z)$.
+
+  \begin{enumerate}
+  \item[(a)] Verify that $\vec{F} = \nabla u$ both inside and outside the sphere. \newline
+    \textbf{Inside the sphere:}
+    \begin{align*}
+      u(x, y, z) &= \frac{3m}{2a} - \frac{m\left( x^2 + y^2 + z^2\right)}{2a^3} \\
+      \pd{u}{x} &= -\frac{mx}{a^3} \\
+      \intertext{
+        The other derivatives follow the same pattern, so
+      }
+      \nabla u &= \left(-\frac{mx}{a^3}, -\frac{my}{a^3}, -\frac{mz}{a^3}\right) = -\frac{m}{a^3}\vec{r} = \vec{F}. \qed
+    \end{align*}
+    \textbf{Outside the sphere:}
+    \begin{align*}
+      u(x, y, z) &= \frac{m}{\sqrt(x^2 + y^2 + z^2)} = m{\left( x^2 + y^2 + z^2 \right)}^{-1/2} \\
+      \pd{u}{x} &= -mx{\left( x^2 + y^2 + z^2\right)}^{-3/2} = -\frac{mx}{r^3} \\
+      \intertext {
+        The other derivatives also follow the same pattern, so
+      }
+      \nabla u &= \left(-\frac{mx}{r^3}, -\frac{my}{r^3}, -\frac{mz}{r^3}\right) = -\frac{m}{r^3}\vec{r} = \vec{F}. \qed
+    \end{align*}
+
+  \item[(b)] Show that $u$ satisfies the Poisson equation
+    \[ \pd[2]{u}{x} + \pd[2]{y}{y} + \pd[2]{u}{z} = \mathrm{constant} \]
+    inside the sphere.
+    \begin{align*}
+      \pd{u}{x} &= -\frac{mx}{a^3} \\
+      \pd[2]{u}{x} &= -\frac{m}{a^3} = \pd[2]{u}{y} = \pd[2]{u}{z} \\
+      \pd[2]{u}{x} &+ \pd[2]{u}{y} + \pd[2]{u}{z} = -\frac{3m}{a^3} = \mathrm{constant}. \qed
+    \end{align*}
+
+  \item[(c)] Show that $u$ satisfies the Laplace equation
+    \[ \pd[2]{u}{x} + \pd[2]{u}{y} + \pd[2]{u}{z} = 0 \]
+    outside the sphere.
+    \begin{align*}
+      \pd{u}{x} &= -mx{\left( x^2 + y^2 + z^2 \right)}^{-3/2} \\
+      \pd[2]{u}{x} &= 3mx^2{\left( x^2 + y^2 + z^2\right)}^{-5/2} - m{\left( x^2 + y^2 + z^2 \right)}^{-3/2} \\
+      &= m\left(3\frac{x^2}{r^5} - \frac{1}{r^3} \right)
+      \intertext{
+        The other derivatives are all of the same form, so
+      }
+      \pd[2]{u}{x} + \pd[2]{u}{y} + \pd[2]{u}{z} &= m\left( 3\frac{x^2 + y^2 + z^2}{r^5} - 3\frac{1}{r^3} \right) \\
+      = 3m\left(\frac{r^2}{r^5} - \frac{1}{r^3} \right) &= 3m\left( \frac{1}{r^3} - \frac{1}{r^3} \right) = 0. \qed
+    \end{align*}
+  \end{enumerate}
+
+\item[(5)] Let $f$ be continuous, $f \geq 0$, on the rectangle $R$.
+  If $\iint_R f = 0$, prove that $f = 0$ on R.
+
+  We will show that this must be true by contradiction.
+  First let us consider the case where $f > 0$ at some point $\vec{p}$ on $R$.
+  By the sign-preserving property, if $f(\vec{p}) > 0$ then there exists a neighborhood $N$ of $\vec{p}$ where $f > 0$.
+  Since $f(N) > 0$, $\iint_N f > 0$.
+  By the additive property for integrals, we then know that $\iint_R f$ must be greater than zero.
+  Since $\iint_R f = 0$, we have a contradition, so we know that $f \not > 0$ anywhere on $R$, so $f = 0$. \qed%
+
+\item[(6)] Let $f \colon \left[0, 1\right] \cross \left[0, 1\right] \to \R$ be defined by
+  \[ f(x, y) = \begin{cases}
+    1, & x \mathrm{\ rational}, \\
+    2y, & x \mathrm{\ irrational}. \\
+  \end{cases} \]
+  Show the iterated integral $\int_0^1 \left[ \int_0^1 f(x, y) dy \right] dx$ exists, but that $f$ is not integrable.
+
+  First we show that the iterated integral exists.
+  \begin{align*}
+    & \int_0^1 \left[ \int_0^1 f(x, y) dy \right] dx
+    = \int_0^1 \left[ \begin{cases}
+        \int_0^1 dy, & x \mathrm{\ rational}, \\
+        \int_0^1 2y\ dy, & x \mathrm{\ irrational} \\
+      \end{cases} \right] dx \\
+    = & \int_0^1 \left[ \begin{cases}
+        1, & x\ \mathrm{rational}, \\
+        1, & x\ \mathrm{irrational} \\
+      \end{cases} \right] dx
+    = \int_0^1 dx = 1
+  \end{align*}
+
+  Next, we show that $f$ is not integrable.
+  In order for $f$ to be integrable, the limit of the sum
+  \[ \lim_{\substack{n \to \infty \\ m \to \infty}}\sum_{i = 1}^n \sum_{j = 1}^m f(x_i, y_j) \Delta x_i \Delta y_j \]
+  must converge for any selection of points $(x_i, y_j)$.
+  Since the integral is additive, the integral of any subdomains must converge to the same value as well.
+  If we choose to define $x_i$ as $\frac{i}{n}$, then every value of $x_i$ is rational, so the function is 1 everywhere, but if we define $x_i'$ as being a sequence of irrational numbers infinitesimally larger than our rational sequence, then there are subdomains where the sum converges to a different value.
+  For instance, the sum on $\left[0, 0.5\right] \cross \left[0, 0.5 \right]$ will converge to $1/4$ for the rational points, and to $1/8$ for the irrational points.
+  Since the limit does not exist for all subdomains, the function is not integrable. \qed%
+\end{enumerate}
+
+\end{document}
